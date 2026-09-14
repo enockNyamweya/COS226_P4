@@ -20,18 +20,68 @@ public class CoarseList
     public boolean add(int value) 
     {
         // TODO
-        return false;
+        lock.lock();
+        try{
+            Node pred=head;
+            Node curr=head.next;
+            while(curr.value<value){
+                pred=curr;
+                curr=curr.next;
+            }
+            if(curr.value==value){
+                return false;
+            }
+            else{
+                Node node = new Node(value);
+                node.next=curr;
+                pred.next=node;
+                return true;
+            }
+
+        } finally{
+            lock.unlock();
+        }
+        //return false;
     }
 
     public boolean remove(int value) 
     {
-        // TODO
-        return false;
+        //TODO
+        lock.lock();
+        try{
+            Node pred = head;
+            Node curr = head.next;
+            while(curr.value < value){
+                pred=curr;
+                curr=curr.next;
+            }
+            if(curr.value == value){
+                pred.next=curr.next;
+                return true;
+            }
+            else{
+                return false;
+            }
+        } finally {
+            lock.unlock();
+        }
+        //return false;
     }
 
     public boolean contains(int value) 
     {
         // TODO
-        return false;
+        lock.lock();
+        try
+            Node prev = head;
+            Node curr = head.next;
+            while(curr.value < value){
+                curr=curr.next;
+            }
+            return curr.value == value;
+        } finally{
+            lock.unlock();
+        }
+        //return false;
     }
 }
