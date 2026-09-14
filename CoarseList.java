@@ -72,7 +72,7 @@ public class CoarseList
     {
         // TODO
         lock.lock();
-        try
+        try{
             Node prev = head;
             Node curr = head.next;
             while(curr.value < value){
