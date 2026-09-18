@@ -18,10 +18,11 @@ public class FineList {
             curr.lock.lock();
             try {
                 while (curr.value < value) {
-                    pred.lock.unlock();
+                    Node oldPred = pred;
                     pred = curr;
                     curr = curr.next;
                     curr.lock.lock();
+                    oldPred.lock.unlock();
                 }
                 if (value == curr.value)
                     return false;
@@ -47,10 +48,11 @@ public class FineList {
 
             try {
                 while (curr.value < value) {
-                    pred.lock.unlock();
+                    Node oldPred = pred;
                     pred = curr;
                     curr = curr.next;
                     curr.lock.lock();
+                    oldPred.lock.unlock();
                 }
 
                 if (curr.value == value) {
@@ -70,9 +72,6 @@ public class FineList {
 
     public boolean contains(int value) {
         this.head.lock.lock();
-        if (value < this.head.value)
-            return false;
-
         Node pred = this.head;
         try {
             Node curr = pred.next;
@@ -80,14 +79,13 @@ public class FineList {
             // traverse the list and find the node
             try {
                 while (curr.value < value) {
-                    pred.lock.unlock();
+                    Node oldPred = pred;
                     pred = curr;
                     curr = curr.next;
                     curr.lock.lock();
-                    if (curr.value == value)
-                        return true;
+                    oldPred.lock.unlock();
                 }
-                return false;
+                return curr.value == value;
 
             } finally {
                 curr.lock.unlock();
